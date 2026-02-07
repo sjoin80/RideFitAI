@@ -13,6 +13,13 @@ export default function App() {
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
 
+  // Base API URL
+  // Uses Vercel env var in production
+  // Falls back to localhost for local development
+  const API_BASE_URL = (
+    import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000"
+  ).replace(/\/$/, "");
+
   const painOptions = useMemo(
     () => [
       ["hand_numbness", "Hand numbness", "🖐️"],
@@ -52,7 +59,7 @@ export default function App() {
     setResult(null);
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/fit", {
+      const res = await fetch(`${API_BASE_URL}/fit`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
