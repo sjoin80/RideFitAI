@@ -1,212 +1,194 @@
-AI Bike Fit Advisor
+# 🚴 AI Bike Fit Advisor
 
-A full stack web application that provides personalized bicycle fit recommendations using rider measurements, riding style, flexibility, and common pain points.
+**Smart bike fit guidance powered by data and full-stack engineering**
 
-Live App: https://ride-fit-ai.vercel.app
+[Live App](https://ride-fit-ai.vercel.app) • [API Docs](https://ridefitai-api.onrender.com/docs)
 
-API: https://ridefitai-api.onrender.com
+---
 
-Overview
+![React](https://img.shields.io/badge/Frontend-React%20(Vite)-blue)
+![FastAPI](https://img.shields.io/badge/Backend-FastAPI-green)
+![Deployment](https://img.shields.io/badge/Deployed-Vercel%20%7C%20Render-black)
+![Status](https://img.shields.io/badge/Status-Live-success)
 
-AI Bike Fit Advisor is designed to help cyclists make safe, incremental adjustments to their bike setup without requiring expensive professional equipment.
+---
 
-The application analyzes rider inputs such as:
+## Overview
 
-Height and inseam
+**AI Bike Fit Advisor** helps cyclists make safe, incremental adjustments to their bike setup using rider measurements, riding style, flexibility, and common pain points.
 
-Riding style (endurance, performance, etc.)
+The application translates real bike-fit principles into practical recommendations without requiring expensive professional equipment.
 
-Flexibility level
+This project demonstrates a complete **full-stack production workflow** from development to cloud deployment.
 
-Reported discomfort or pain areas
+---
 
-It then returns:
+## What It Does
 
-Recommended saddle height and range
+The app analyzes:
 
-Reach and handlebar guidance
+- Height and inseam  
+- Riding style (endurance, performance, etc.)  
+- Flexibility level  
+- Reported pain or discomfort  
 
-Geometry suggestions
+It returns:
 
-Confidence level
+- Recommended saddle height (with range)
+- Reach and handlebar guidance
+- Bike geometry suggestions
+- Confidence level
+- Pain-specific adjustment insights
+- A prioritized next adjustment
 
-Pain specific adjustment insights
+**Goal:** Practical guidance — not medical diagnosis.
 
-A prioritized next adjustment
+---
 
-The goal is not medical diagnosis, but practical, data informed fit guidance.
+## Why This Project Matters
 
-Why This Project Exists
+Bike fit directly affects comfort, efficiency, and injury prevention. However, professional fitting services are not always accessible.
 
-Bike fit has a direct impact on comfort, performance, and injury prevention, but professional fitting services are not always accessible.
+This project shows how software can:
 
-This project demonstrates how software and simple rule based intelligence can:
+- Translate biomechanics into actionable guidance  
+- Provide safe, structured adjustments  
+- Help riders understand how position affects performance  
 
-Translate biomechanical principles into actionable guidance
+From a development perspective, it demonstrates how to take an idea and ship a **real, public product**.
 
-Provide safe adjustment recommendations
+---
 
-Help riders learn how their position affects comfort and performance
+## Educational Purpose
 
-From a development perspective, this project was built to demonstrate real world full stack architecture and deployment.
+This repository is designed as a learning resource for:
 
-Educational Value
+- Full-stack development (React + FastAPI)
+- API design and data modeling
+- Environment configuration
+- CORS and cross-origin communication
+- Cloud deployment using free services
+- Production architecture for portfolio projects
 
-This project is intentionally structured as a learning resource for students and developers who want to understand:
+Great for students or developers who want to learn how to go from **local project → live application**.
 
-Full stack architecture (React + FastAPI)
+---
 
-API design and data modeling
+## Tech Stack
 
-Environment based configuration
+**Frontend**
+- React (Vite)
+- Bootstrap
+- Fetch API
 
-CORS and cross origin communication
+**Backend**
+- FastAPI
+- Pydantic
+- Python
 
-Production deployment using free cloud services
+**Deployment**
+- Vercel (Frontend)
+- Render (Backend)
 
-Real world project structure for a portfolio
+---
 
-It can be used to learn:
+## Live Demo
 
-How frontend and backend communicate
+Frontend  
+https://ride-fit-ai.vercel.app
 
-How to deploy a Python API publicly
+Backend  
+https://ridefitai-api.onrender.com
 
-How to deploy a modern React app
+API Documentation  
+https://ridefitai-api.onrender.com/docs
 
-How to manage environment variables
+---
 
-How to structure a practical software project from idea to production
+## Running Locally
 
-Technology Stack
+### Clone
 
-Frontend
-
-React (Vite)
-
-Bootstrap
-
-Fetch API
-
-Backend
-
-FastAPI
-
-Pydantic
-
-Python
-
-Deployment
-
-Frontend: Vercel
-
-Backend: Render
-
-Features
-
-Rider measurement input
-
-Pain point selection
-
-Rule based fit estimation
-
-Saddle height calculation with range
-
-Position and geometry guidance
-
-Confidence scoring
-
-Prioritized adjustment recommendation
-
-Public API endpoint
-
-Production deployment
-
-Installation (Local Development)
-
-Clone the repository:
-
+```bash
 git clone https://github.com/sjoin80/RideFitAI.git
 cd RideFitAI
+```
 
-Backend
+---
+
+### Backend
+
+```bash
 cd backend
 python -m venv venv
-venv\Scripts\activate  (Windows)
+venv\Scripts\activate   # Windows
 pip install -r requirements.txt
 uvicorn main:app --reload
+```
 
-
-Backend runs at:
+Backend runs at  
 http://127.0.0.1:8000
 
-API docs:
+Docs  
 http://127.0.0.1:8000/docs
 
-Frontend
+---
+
+### Frontend
 
 Open a new terminal:
 
+```bash
 cd frontend
 npm install
 npm run dev
+```
 
-
-Frontend runs at:
+Frontend runs at  
 http://localhost:5173
 
-The frontend will automatically connect to the local backend.
+---
 
-Environment Configuration
+## Environment Variables
 
-The frontend uses:
+Frontend uses:
 
+```
 VITE_API_BASE_URL
-
-
-Examples:
+```
 
 Local:
-
+```
 http://127.0.0.1:8000
-
+```
 
 Production:
-
+```
 https://ridefitai-api.onrender.com
+```
 
-Educational Use Case
+---
 
-This project is ideal for:
+## Ideas for Extension (Educational)
 
-Students learning full stack development
+- Add machine learning fit predictions
+- User accounts and saved fits
+- Ride history tracking
+- Analytics dashboard
+- Mobile optimization
+- Stripe integration for paid fits
 
-Developers learning FastAPI or React
+---
 
-Portfolio demonstration of deployment skills
+## Disclaimer
 
-Understanding how to turn a concept into a working product
+This tool provides general bike fit guidance based on common fitting principles. It is not a medical or professional fitting service. Adjust gradually and consult a professional fitter for persistent pain.
 
-Learning cloud deployment without paid infrastructure
+---
 
-You are encouraged to fork the project and:
+## Author
 
-Add machine learning models
+**Shelby Joiner**  
+Computer Science Student | Full-Stack Developer  
 
-Add user accounts
-
-Add ride history tracking
-
-Improve the fit logic
-
-Add analytics or monetization features
-
-Disclaimer
-
-This tool provides general bike fit guidance based on common fitting principles. It is not a medical or professional fitting service. Users should make adjustments gradually and consult a professional fitter for persistent pain or complex issues.
-
-Author
-
-Shelby Joiner
-Computer Science Student | Full Stack Developer
 GitHub: https://github.com/sjoin80
