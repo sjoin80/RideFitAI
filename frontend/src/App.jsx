@@ -75,67 +75,80 @@ export default function App() {
   const confidencePct = Math.round(((result?.confidence ?? 0) * 100 + Number.EPSILON) * 1) / 1;
 
   return (
-    <div className="min-vh-100 py-5" style={styles.bg}>
-      <div className="container" style={{ maxWidth: 980 }}>
-        <div className="mb-4 text-white">
-          <span className="badge rounded-pill me-2" style={styles.badge}>
-            ✨ Smart fit • fast feedback
-          </span>
-          <h1 className="display-5 fw-bold mt-3">AI Bike Fit Advisor</h1>
-          <p className="lead opacity-75 mb-0">
-            Enter your basics, add any pain points, and get a starting fit estimate you can test on a short ride.
-          </p>
+    <div className="min-vh-100 py-4 py-md-5">
+      <div className="container rf-wrap">
+        {/* top pill */}
+        <div className="rf-pill mb-3">
+          <span>✨</span>
+          <span className="fw-semibold">Smart fit</span>
+          <span className="opacity-50">•</span>
+          <span className="rf-muted">fast feedback</span>
         </div>
+
+        {/* header */}
+        <h1 className="display-5 fw-bold rf-section-title mb-2">AI Bike Fit Advisor</h1>
+        <p className="lead rf-muted rf-subtitle mb-4">
+          Enter your basics, add any pain points, and get a starting fit estimate you can test on a short ride.
+        </p>
 
         <div className="row g-4">
           {/* Inputs */}
           <div className="col-12 col-lg-6">
-            <div className="card border-0 shadow-lg" style={styles.card}>
-              <div className="card-body p-4 p-md-5">
-                <div className="d-flex align-items-start justify-content-between mb-3">
+            <div className="card rf-card h-100">
+              <div className="card-header py-4 px-4">
+                <div className="d-flex justify-content-between align-items-start gap-3">
                   <div>
-                    <h2 className="h4 fw-bold mb-1 text-white">Inputs</h2>
-                    <div className="text-white-50 small">Keep it simple: one adjustment at a time, then retest.</div>
+                    <h2 className="h4 mb-1 fw-bold">Inputs</h2>
+                    <div className="rf-muted small">
+                      Keep it simple: one adjustment at a time, then retest.
+                    </div>
                   </div>
-                  <div style={styles.iconBlock} />
+                  <div
+                    style={{
+                      width: 44,
+                      height: 44,
+                      borderRadius: 16,
+                      background: "linear-gradient(135deg, rgba(0,195,255,0.30), rgba(187,0,255,0.30))",
+                      border: "1px solid rgba(255,255,255,0.10)",
+                    }}
+                  />
                 </div>
+              </div>
 
+              <div className="card-body px-4 pb-4">
                 <form onSubmit={submit}>
                   <div className="row g-3">
-                    <div className="col-12 col-sm-6">
-                      <label className="form-label text-white-75">Height (in)</label>
+                    <div className="col-12 col-md-6">
+                      <label className="form-label fw-semibold">Height (in)</label>
                       <input
-                        className="form-control form-control-lg"
-                        style={styles.input}
                         name="height_in"
                         type="number"
                         step="0.1"
                         value={form.height_in}
                         onChange={onChange}
+                        className="form-control rf-input"
                       />
                     </div>
 
-                    <div className="col-12 col-sm-6">
-                      <label className="form-label text-white-75">Inseam (in)</label>
+                    <div className="col-12 col-md-6">
+                      <label className="form-label fw-semibold">Inseam (in)</label>
                       <input
-                        className="form-control form-control-lg"
-                        style={styles.input}
                         name="inseam_in"
                         type="number"
                         step="0.1"
                         value={form.inseam_in}
                         onChange={onChange}
+                        className="form-control rf-input"
                       />
                     </div>
 
-                    <div className="col-12 col-sm-6">
-                      <label className="form-label text-white-75">Riding style</label>
+                    <div className="col-12 col-md-6">
+                      <label className="form-label fw-semibold">Riding style</label>
                       <select
-                        className="form-select form-select-lg"
-                        style={styles.input}
                         name="riding_style"
                         value={form.riding_style}
                         onChange={onChange}
+                        className="form-select rf-select"
                       >
                         <option value="endurance">endurance</option>
                         <option value="race">race</option>
@@ -144,63 +157,68 @@ export default function App() {
                       </select>
                     </div>
 
-                    <div className="col-12 col-sm-6">
-                      <label className="form-label text-white-75">Flexibility</label>
+                    <div className="col-12 col-md-6">
+                      <label className="form-label fw-semibold">Flexibility</label>
                       <select
-                        className="form-select form-select-lg"
-                        style={styles.input}
                         name="flexibility"
                         value={form.flexibility}
                         onChange={onChange}
+                        className="form-select rf-select"
                       >
                         <option value="low">low</option>
                         <option value="medium">medium</option>
                         <option value="high">high</option>
                       </select>
                     </div>
+
+                    {/* Pain points */}
+                    <div className="col-12 mt-2">
+                      <div className="rf-card p-4">
+                        <div className="d-flex justify-content-between align-items-center">
+                          <div className="fw-bold">Pain points</div>
+                          <span className="rf-muted small">optional</span>
+                        </div>
+
+                        <div className="d-flex flex-wrap gap-2 mt-3">
+                          {painOptions.map(([key, label, icon]) => {
+                            const active = form.pain_points.includes(key);
+                            return (
+                              <button
+                                key={key}
+                                type="button"
+                                onClick={() => togglePain(key)}
+                                className={`rf-chip ${active ? "active" : ""}`}
+                              >
+                                <span>{icon}</span>
+                                <span className="fw-semibold">{label}</span>
+                                <span className="rf-badge">{active ? "ON" : "OFF"}</span>
+                              </button>
+                            );
+                          })}
+                        </div>
+
+                        <div className="rf-muted small mt-3">
+                          Pick what you feel during rides and we will prioritize the best first adjustment.
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Submit */}
+                    <div className="col-12 mt-2">
+                      <button className="w-100 rf-btn" type="submit" disabled={loading}>
+                        {loading ? "Calculating..." : "Get Fit Estimate"}
+                      </button>
+                    </div>
+
+                    {/* Error */}
+                    {error && (
+                      <div className="col-12">
+                        <div className="alert alert-danger mb-0">
+                          {error}
+                        </div>
+                      </div>
+                    )}
                   </div>
-
-                  <div className="mt-4 p-3 p-md-4 rounded-4" style={styles.panel}>
-                    <div className="d-flex justify-content-between align-items-center">
-                      <div className="fw-bold text-white">Pain points</div>
-                      <div className="text-white-50 small">optional</div>
-                    </div>
-
-                    <div className="mt-3 d-flex flex-wrap gap-2">
-                      {painOptions.map(([key, label, icon]) => {
-                        const active = form.pain_points.includes(key);
-                        return (
-                          <button
-                            key={key}
-                            type="button"
-                            onClick={() => togglePain(key)}
-                            className="btn btn-sm rounded-pill"
-                            style={active ? styles.pillOn : styles.pillOff}
-                          >
-                            <span className="me-2">{icon}</span>
-                            {label}
-                            <span className="ms-2 badge rounded-pill" style={active ? styles.pillBadgeOn : styles.pillBadgeOff}>
-                              {active ? "ON" : "OFF"}
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </div>
-
-                    <div className="text-white-50 small mt-3">
-                      Pick what you feel during rides and we will prioritize the best first adjustment.
-                    </div>
-                  </div>
-
-                  <button type="submit" disabled={loading} className="btn btn-lg w-100 mt-4" style={styles.cta}>
-                    {loading ? "Calculating..." : "Get Fit Estimate"}
-                  </button>
-
-                  {error && (
-                    <div className="alert alert-danger mt-3 mb-0" role="alert">
-                      {error}
-                    </div>
-                  )}
                 </form>
               </div>
             </div>
@@ -208,196 +226,152 @@ export default function App() {
 
           {/* Results */}
           <div className="col-12 col-lg-6">
-            <div className="card border-0 shadow-lg" style={styles.card}>
-              <div className="card-body p-4 p-md-5">
-                <div className="d-flex align-items-start justify-content-between mb-3">
+            <div className="card rf-card h-100">
+              <div className="card-header py-4 px-4">
+                <div className="d-flex justify-content-between align-items-start gap-3">
                   <div>
-                    <h2 className="h4 fw-bold mb-1 text-white">Results</h2>
-                    <div className="text-white-50 small">Your starting point. Adjust in small steps and retest.</div>
+                    <h2 className="h4 mb-1 fw-bold">Results</h2>
+                    <div className="rf-muted small">
+                      Your starting point. Adjust in small steps and retest.
+                    </div>
                   </div>
-                  <div style={styles.iconBlock2} />
+                  <div
+                    style={{
+                      width: 44,
+                      height: 44,
+                      borderRadius: 16,
+                      background: "linear-gradient(135deg, rgba(0,255,170,0.22), rgba(0,195,255,0.22))",
+                      border: "1px solid rgba(255,255,255,0.10)",
+                    }}
+                  />
                 </div>
+              </div>
 
+              <div className="card-body px-4 pb-4">
                 {!result ? (
-                  <div className="p-4 rounded-4" style={styles.panel}>
-                    <div className="text-white-50">Run an estimate to see your fit guidance here.</div>
+                  <div className="rf-card p-4 rf-muted">
+                    Run an estimate to see your fit guidance here.
                   </div>
                 ) : (
-                  <>
-                    <div className="p-4 rounded-4 mb-3" style={styles.panel}>
-                      <div className="text-white-50 small">Saddle height</div>
-                      <div className="text-white display-6 fw-bold mb-2">
-                        {result.saddle_height_in} in{" "}
-                        <span className="fs-6 fw-semibold text-white-50">
+                  <div className="d-flex flex-column gap-3">
+                    {/* Saddle card */}
+                    <div className="rf-card p-4">
+                      <div className="rf-muted small">Saddle height</div>
+                      <div className="d-flex align-items-end gap-2 flex-wrap">
+                        <div className="display-6 fw-bold mb-0">
+                          {result.saddle_height_in} in
+                        </div>
+                        <div className="rf-muted fw-semibold mb-2">
                           ({result.saddle_height_cm} cm)
-                        </span>
+                        </div>
                       </div>
 
-                      <div className="text-white-50 small">Recommended range</div>
-                      <div className="text-white fw-semibold">
+                      <div className="rf-muted small mt-3">Recommended range</div>
+                      <div className="fw-semibold">
                         {result.saddle_height_range_in[0]}–{result.saddle_height_range_in[1]} in{" "}
-                        <span className="text-white-50 fw-normal">
+                        <span className="rf-muted fw-normal">
                           ({result.saddle_height_range_cm[0]}–{result.saddle_height_range_cm[1]} cm)
                         </span>
                       </div>
 
-                      <div className="mt-4">
-                        <div className="d-flex justify-content-between small text-white-50">
-                          <span>Confidence</span>
-                          <span>{confidencePct}%</span>
+                      <div className="d-flex justify-content-between align-items-center mt-4">
+                        <div className="rf-muted small">Confidence</div>
+                        <div className="rf-muted small">{confidencePct}%</div>
+                      </div>
+                      <div className="rf-progress mt-2">
+                        <div style={{ width: `${confidencePct}%` }} />
+                      </div>
+                    </div>
+
+                    {/* Guidance */}
+                    <div className="rf-card p-4">
+                      <div className="fw-bold mb-2">Guidance</div>
+                      <div className="small">
+                        <div className="mb-2">
+                          <span className="fw-bold">Reach:</span>{" "}
+                          <span className="rf-muted">{result.reach_guidance}</span>
                         </div>
-                        <div className="progress mt-2" style={{ height: 10, background: "rgba(255,255,255,0.08)" }}>
-                          <div className="progress-bar" role="progressbar" style={{ width: `${confidencePct}%`, ...styles.progress }} />
+                        <div className="mb-2">
+                          <span className="fw-bold">Bar drop:</span>{" "}
+                          <span className="rf-muted">{result.bar_drop_guidance}</span>
+                        </div>
+                        <div>
+                          <span className="fw-bold">Geometry:</span>{" "}
+                          <span className="rf-muted">{result.geometry_guidance}</span>
                         </div>
                       </div>
                     </div>
 
-                    <div className="p-4 rounded-4 mb-3" style={styles.panel}>
-                      <div className="text-white mb-2">
-                        <span className="fw-bold">Reach:</span> <span className="text-white-75">{result.reach_guidance}</span>
-                      </div>
-                      <div className="text-white mb-2">
-                        <span className="fw-bold">Bar drop:</span> <span className="text-white-75">{result.bar_drop_guidance}</span>
-                      </div>
-                      <div className="text-white">
-                        <span className="fw-bold">Geometry:</span> <span className="text-white-75">{result.geometry_guidance}</span>
-                      </div>
-                    </div>
-
+                    {/* Pain guidance */}
                     {result.pain_analysis?.length > 0 && (
-                      <div className="p-4 rounded-4 mb-3" style={styles.panel}>
-                        <div className="fw-bold text-white mb-2">Pain guidance</div>
+                      <div className="rf-card p-4">
+                        <div className="fw-bold">Pain guidance</div>
+
                         {result.priority_adjustment && (
-                          <div className="text-white-75 mb-3">
-                            <span className="fw-bold text-white">Priority:</span> {result.priority_adjustment}
+                          <div className="mt-2 small">
+                            <span className="fw-bold">Priority:</span>{" "}
+                            <span className="rf-muted">{result.priority_adjustment}</span>
                           </div>
                         )}
 
-                        {result.pain_analysis.map((p, idx) => (
-                          <div key={idx} className="p-3 rounded-4 mb-3" style={styles.panelInner}>
-                            <div className="fw-bold text-white">{p.label}</div>
-                            <ul className="mt-2 mb-2 text-white-75">
-                              {p.likely_causes.map((c, i) => (
-                                <li key={i}>{c}</li>
-                              ))}
-                            </ul>
-                            <div className="text-white-75">
-                              <span className="fw-bold text-white">First adjustment:</span> {p.first_adjustment}
+                        <div className="mt-3 d-flex flex-column gap-3">
+                          {result.pain_analysis.map((p, idx) => (
+                            <div key={idx} className="rf-card p-3">
+                              <div className="fw-bold">{p.label}</div>
+                              <ul className="mt-2 mb-2 small rf-muted">
+                                {p.likely_causes.map((c, i) => (
+                                  <li key={i}>{c}</li>
+                                ))}
+                              </ul>
+                              <div className="small">
+                                <span className="fw-bold">First adjustment:</span>{" "}
+                                <span className="rf-muted">{p.first_adjustment}</span>
+                              </div>
+                              <div className="small mt-1">
+                                <span className="fw-bold">Caution:</span>{" "}
+                                <span className="rf-muted">{p.caution}</span>
+                              </div>
                             </div>
-                            <div className="text-white-50 small mt-1">
-                              <span className="fw-bold text-white-75">Caution:</span> {p.caution}
-                            </div>
-                          </div>
-                        ))}
+                          ))}
+                        </div>
                       </div>
                     )}
 
+                    {/* Next adjustment */}
+                    <div className="rf-card p-4">
+                      <div className="fw-bold">Next adjustment</div>
+                      <div className="mt-2 small rf-muted">{result.next_adjustment}</div>
+                      <div className="mt-3 small rf-muted">{result.disclaimer}</div>
+                    </div>
+
+                    {/* Notes */}
                     {result.notes?.length > 0 && (
-                      <div className="p-4 rounded-4 mb-3" style={styles.panel}>
-                        <div className="fw-bold text-white mb-2">Notes</div>
-                        <ul className="mb-0 text-white-75">
+                      <div className="rf-card p-4">
+                        <div className="fw-bold">Notes</div>
+                        <ul className="mt-2 mb-0 small rf-muted">
                           {result.notes.map((n, i) => (
                             <li key={i}>{n}</li>
                           ))}
                         </ul>
                       </div>
                     )}
-
-                    <div className="p-4 rounded-4" style={styles.panel}>
-                      <div className="text-white-75">
-                        <span className="fw-bold text-white">Next adjustment:</span> {result.next_adjustment}
-                      </div>
-                      <div className="text-white-50 small mt-2">{result.disclaimer}</div>
-                    </div>
-                  </>
+                  </div>
                 )}
+
+                <div className="rf-muted small mt-4">
+                  This tool provides general guidance only and is not a substitute for a professional bike fit. 
+                  Make small adjustments and test on short rides. Stop if you experience pain or discomfort.
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="text-white-50 small mt-4">
-          Built locally at C:\Users\Shelby Joiner\Documents\Personal\RideFitAI
+        {/* footer */}
+        <div className="rf-muted small mt-4">
+          AI Bike Fit Advisor • Prototype • Created by Shelby Joiner 
         </div>
       </div>
     </div>
   );
 }
-
-const styles = {
-  bg: {
-    background:
-      "radial-gradient(900px 600px at 10% 10%, rgba(217,70,239,0.18), transparent 60%), " +
-      "radial-gradient(900px 600px at 90% 20%, rgba(34,211,238,0.16), transparent 60%), " +
-      "radial-gradient(900px 700px at 55% 90%, rgba(52,211,153,0.12), transparent 60%), " +
-      "linear-gradient(180deg, #05070f, #070b16)",
-  },
-  badge: {
-    background: "rgba(255,255,255,0.08)",
-    border: "1px solid rgba(255,255,255,0.12)",
-    color: "rgba(255,255,255,0.9)",
-    backdropFilter: "blur(10px)",
-  },
-  card: {
-    background: "rgba(255,255,255,0.06)",
-    borderRadius: 24,
-    backdropFilter: "blur(14px)",
-  },
-  panel: {
-    background: "rgba(255,255,255,0.05)",
-    border: "1px solid rgba(255,255,255,0.10)",
-  },
-  panelInner: {
-    background: "rgba(255,255,255,0.06)",
-    border: "1px solid rgba(255,255,255,0.10)",
-  },
-  input: {
-    background: "rgba(255,255,255,0.06)",
-    border: "1px solid rgba(255,255,255,0.12)",
-    color: "white",
-  },
-  cta: {
-    borderRadius: 18,
-    border: "0",
-    color: "#08101a",
-    fontWeight: 800,
-    background: "linear-gradient(90deg, rgba(34,211,238,1), rgba(59,130,246,1), rgba(217,70,239,1))",
-    boxShadow: "0 14px 30px rgba(217,70,239,0.10)",
-  },
-  progress: {
-    background: "linear-gradient(90deg, rgba(52,211,153,1), rgba(34,211,238,1), rgba(217,70,239,1))",
-  },
-  pillOff: {
-    background: "rgba(255,255,255,0.06)",
-    border: "1px solid rgba(255,255,255,0.14)",
-    color: "rgba(255,255,255,0.88)",
-  },
-  pillOn: {
-    background: "linear-gradient(90deg, rgba(34,211,238,0.16), rgba(217,70,239,0.16))",
-    border: "1px solid rgba(34,211,238,0.35)",
-    color: "white",
-    boxShadow: "0 10px 24px rgba(34,211,238,0.08)",
-  },
-  pillBadgeOff: {
-    background: "rgba(255,255,255,0.10)",
-    color: "rgba(255,255,255,0.75)",
-  },
-  pillBadgeOn: {
-    background: "rgba(255,255,255,0.16)",
-    color: "white",
-  },
-  iconBlock: {
-    height: 40,
-    width: 40,
-    borderRadius: 14,
-    background: "linear-gradient(135deg, rgba(34,211,238,0.25), rgba(217,70,239,0.25))",
-    border: "1px solid rgba(255,255,255,0.12)",
-  },
-  iconBlock2: {
-    height: 40,
-    width: 40,
-    borderRadius: 14,
-    background: "linear-gradient(135deg, rgba(52,211,153,0.22), rgba(34,211,238,0.18))",
-    border: "1px solid rgba(255,255,255,0.12)",
-  },
-};

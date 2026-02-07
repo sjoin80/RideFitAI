@@ -1,5 +1,143 @@
-
+/* Bootstrap is primary. This file only adds the custom "modern" vibe. */
 
 html, body, #root {
   height: 100%;
+  margin: 0;
+}
+
+:root {
+  --rf-bg: #05070f;
+  --rf-panel: rgba(255, 255, 255, 0.06);
+  --rf-border: rgba(255, 255, 255, 0.12);
+  --rf-text: rgba(255, 255, 255, 0.92);
+  --rf-muted: rgba(255, 255, 255, 0.65);
+}
+
+body {
+  background: radial-gradient(900px 600px at 15% 10%, rgba(187, 0, 255, 0.25), transparent 55%),
+              radial-gradient(900px 600px at 80% 20%, rgba(0, 195, 255, 0.22), transparent 55%),
+              radial-gradient(900px 600px at 55% 90%, rgba(0, 255, 170, 0.12), transparent 55%),
+              var(--rf-bg);
+  color: var(--rf-text);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+.rf-wrap {
+  max-width: 1100px;
+}
+
+.rf-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid var(--rf-border);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  color: var(--rf-text);
+  font-size: 0.9rem;
+}
+
+.rf-card {
+  border: 1px solid var(--rf-border);
+  background: var(--rf-panel);
+  backdrop-filter: blur(14px);
+  border-radius: 1.25rem;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+}
+
+.rf-card .card-header {
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  background: transparent;
+}
+
+.rf-muted {
+  color: var(--rf-muted);
+}
+
+.rf-input,
+.rf-select {
+  background: rgba(10, 14, 24, 0.55) !important;
+  color: var(--rf-text) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  border-radius: 0.9rem !important;
+  padding: 0.7rem 0.9rem !important;
+}
+
+.rf-input:focus,
+.rf-select:focus {
+  box-shadow: 0 0 0 0.25rem rgba(0, 195, 255, 0.18) !important;
+  border-color: rgba(0, 195, 255, 0.5) !important;
+}
+
+.rf-chip {
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.06);
+  color: var(--rf-text);
+  border-radius: 999px;
+  padding: 0.4rem 0.7rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
+}
+
+.rf-chip:hover {
+  transform: translateY(-1px);
+  background: rgba(255,255,255,0.09);
+}
+
+.rf-chip.active {
+  border-color: rgba(0, 195, 255, 0.55);
+  background: linear-gradient(90deg, rgba(0, 195, 255, 0.16), rgba(187, 0, 255, 0.16));
+  box-shadow: 0 0 0 0.2rem rgba(255,255,255,0.06);
+}
+
+.rf-badge {
+  font-size: 0.75rem;
+  padding: 0.18rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.85);
+  background: rgba(255,255,255,0.06);
+}
+
+.rf-btn {
+  border: 0;
+  border-radius: 1rem;
+  padding: 0.9rem 1.1rem;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  color: #070814;
+  background: linear-gradient(90deg, #00c3ff, #5b7cff, #bb00ff);
+  box-shadow: 0 16px 35px rgba(187, 0, 255, 0.14);
+}
+
+.rf-btn:disabled {
+  opacity: 0.65;
+}
+
+.rf-progress {
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.10);
+  overflow: hidden;
+}
+
+.rf-progress > div {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #00ffaa, #00c3ff, #bb00ff);
+}
+
+.rf-section-title {
+  font-weight: 900;
+  letter-spacing: -0.3px;
+}
+
+.rf-subtitle {
+  max-width: 720px;
 }
