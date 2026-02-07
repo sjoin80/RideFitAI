@@ -1,24 +1,33 @@
 from typing import List, Tuple, Optional
+import os
+
 from fastapi import FastAPI
-from pydantic import BaseModel, Field
-from backend.services.fit_model import estimate_fit
-
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel, Field
 
+from services.fit_model import estimate_fit
 
 app = FastAPI(title="AI Bike Fit Advisor API")
 
-# CORS: allows the React frontend (localhost:5173) to call this API (localhost:8000)
+# Health check endpoint to verify the API is running
+@app.get("/health")
+def health():
+    return {"ok": True}
+
+# CORS: allow frontend origins (local + deployed) via env var
+# Example Render env var:
+# CORS_ORIGINS="http://localhost:5173,https://your-app.vercel.app"
+origins = os.getenv("CORS_ORIGINS", "http://localhost:5173").split(",")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=[o.strip() for o in origins if o.strip()],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 # Pain point "vocabulary" we will accept from the UI / voice parser.
-# Keeping this list controlled prevents random strings and helps consistency.
 ALLOWED_PAIN_POINTS = {
     "knee_front",
     "knee_back",
@@ -90,17 +99,12 @@ PAIN_RULES = {
     },
 }
 
-
 class FitRequest(BaseModel):
     height_in: float = Field(..., gt=0, examples=[74])
     inseam_in: float = Field(..., gt=0, examples=[35])
     riding_style: str = Field(..., examples=["endurance"])
     flexibility: str = Field(..., examples=["medium"])
-
-    # NEW: pain points list. Defaults to empty list if user has none.
-    # This is what your UI checkboxes and voice input will populate.
     pain_points: List[str] = Field(default_factory=list, examples=[["hand_numbness", "knee_front"]])
-
 
 class PainInsight(BaseModel):
     pain_point: str
@@ -108,7 +112,6 @@ class PainInsight(BaseModel):
     likely_causes: List[str]
     first_adjustment: str
     caution: str
-
 
 class FitResponse(BaseModel):
     saddle_height_in: float
@@ -123,20 +126,15 @@ class FitResponse(BaseModel):
     next_adjustment: str
     disclaimer: str
 
-    # NEW: pain analysis returned as structured items
-    pain_analysis: List[PainInsight] = []
-    # NEW: one suggested priority action string, optional if no pain points
+    pain_analysis: List[PainInsight] = Field(default_factory=list)
     priority_adjustment: Optional[str] = None
-
 
 @app.get("/")
 def root():
     return {"message": "AI Bike Fit Advisor is running"}
 
-
 @app.post("/fit", response_model=FitResponse)
 def fit(data: FitRequest):
-    # Base fit estimate stays exactly the same
     result = estimate_fit(
         height_in=data.height_in,
         inseam_in=data.inseam_in,
@@ -144,7 +142,6 @@ def fit(data: FitRequest):
         flexibility=data.flexibility,
     )
 
-    # NEW: Filter pain points to a known set (prevents unexpected strings)
     cleaned = [p.strip().lower() for p in (data.pain_points or [])]
     valid_pains = [p for p in cleaned if p in ALLOWED_PAIN_POINTS]
 
@@ -162,20 +159,16 @@ def fit(data: FitRequest):
                 }
             )
 
-    # NEW: Priority adjustment picks the first pain point's first adjustment (simple MVP logic)
     priority_adjustment = None
     if pain_analysis:
         priority_adjustment = pain_analysis[0]["first_adjustment"]
 
-        # Also add a note so the user sees this even if they miss the section
         result.setdefault("notes", [])
         result["notes"].append("Pain guidance added. Make one change at a time and retest on a short ride.")
 
-        # Slightly reduce confidence if pain points exist (signals additional complexity)
         if "confidence" in result:
             result["confidence"] = round(max(0.35, result["confidence"] - 0.05), 2)
 
-    # Merge new fields into the existing result payload
     result["pain_analysis"] = pain_analysis
     result["priority_adjustment"] = priority_adjustment
 
