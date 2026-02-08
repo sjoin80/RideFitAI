@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ride-fit-ai.vercel.app/sitemap.xml
