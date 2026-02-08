@@ -6,13 +6,16 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from services.fit_model import estimate_fit
+from services.plan import build_fit_plan
 
 app = FastAPI(title="AI Bike Fit Advisor API")
+
 
 # Health check endpoint to verify the API is running
 @app.get("/health")
 def health():
     return {"ok": True}
+
 
 # CORS: allow frontend origins (local + deployed) via env var
 # Example Render env var:
@@ -99,6 +102,7 @@ PAIN_RULES = {
     },
 }
 
+
 class FitRequest(BaseModel):
     height_in: float = Field(..., gt=0, examples=[74])
     inseam_in: float = Field(..., gt=0, examples=[35])
@@ -106,12 +110,31 @@ class FitRequest(BaseModel):
     flexibility: str = Field(..., examples=["medium"])
     pain_points: List[str] = Field(default_factory=list, examples=[["hand_numbness", "knee_front"]])
 
+
 class PainInsight(BaseModel):
     pain_point: str
     label: str
     likely_causes: List[str]
     first_adjustment: str
     caution: str
+
+
+class PlanStep(BaseModel):
+    step: int
+    title: str
+    action: str
+    why: str
+    test_ride: str
+    success_signals: List[str]
+    if_worse: str
+
+
+class FitPlan(BaseModel):
+    adjustment_plan: List[PlanStep] = Field(default_factory=list)
+    what_to_track: List[str] = Field(default_factory=list)
+    follow_up_questions: List[str] = Field(default_factory=list)
+    warnings: List[str] = Field(default_factory=list)
+
 
 class FitResponse(BaseModel):
     saddle_height_in: float
@@ -129,9 +152,14 @@ class FitResponse(BaseModel):
     pain_analysis: List[PainInsight] = Field(default_factory=list)
     priority_adjustment: Optional[str] = None
 
+    # NEW: comprehensive coaching plan (built from your base result + pain points)
+    plan: FitPlan = Field(default_factory=FitPlan)
+
+
 @app.get("/")
 def root():
     return {"message": "AI Bike Fit Advisor is running"}
+
 
 @app.post("/fit", response_model=FitResponse)
 def fit(data: FitRequest):
@@ -169,7 +197,11 @@ def fit(data: FitRequest):
         if "confidence" in result:
             result["confidence"] = round(max(0.35, result["confidence"] - 0.05), 2)
 
+    # Attach pain analysis
     result["pain_analysis"] = pain_analysis
     result["priority_adjustment"] = priority_adjustment
+
+    # NEW: Attach the comprehensive plan (rule-based, fast)
+    result["plan"] = build_fit_plan(result, data.pain_points)
 
     return result
