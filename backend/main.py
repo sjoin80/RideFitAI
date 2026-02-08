@@ -152,7 +152,6 @@ class FitResponse(BaseModel):
     pain_analysis: List[PainInsight] = Field(default_factory=list)
     priority_adjustment: Optional[str] = None
 
-    # NEW: comprehensive coaching plan (built from your base result + pain points)
     plan: FitPlan = Field(default_factory=FitPlan)
 
 
@@ -197,11 +196,12 @@ def fit(data: FitRequest):
         if "confidence" in result:
             result["confidence"] = round(max(0.35, result["confidence"] - 0.05), 2)
 
-    # Attach pain analysis
     result["pain_analysis"] = pain_analysis
     result["priority_adjustment"] = priority_adjustment
 
-    # NEW: Attach the comprehensive plan (rule-based, fast)
+    # NEW: attach detailed plan
     result["plan"] = build_fit_plan(result, data.pain_points)
 
-    return result
+    # Return validated response model
+    return FitResponse(**result)
+
