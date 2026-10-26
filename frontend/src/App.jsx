@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { Analytics } from "@vercel/analytics/react";
 
 export default function App() {
   const [form, setForm] = useState({
@@ -379,6 +380,7 @@ export default function App() {
           AI Bike Fit Advisor • Prototype • Created by Shelby Joiner 
         </div>
       </div>
+      <Analytics />
     </div>
   );
 }
